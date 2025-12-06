@@ -1,4 +1,5 @@
 .DS_Store
+mlruns/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
