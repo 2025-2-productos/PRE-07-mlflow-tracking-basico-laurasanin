@@ -1,31 +1,18 @@
-#### MAKE_PREDICTIONS ####
-
-"""Prediccion script for the MLflow model.
-
-This script loads a model from MLflow and makes predictions on a dataset.
-
-$ python3 make_predictions.py
-
-
-"""
-
 import mlflow
 import pandas as pd
 
+# Configura el tracking URI para que coincida con el de entrenamiento
+mlflow.set_tracking_uri("sqlite:///mlruns.db")
+
 FILE_PATH = "data/winequality-red.csv"
 
-
 df = pd.read_csv(FILE_PATH)
+
 y = df["quality"]
-x = df.drop(columns=["quality"])
+X = df.drop(columns=["quality"])
 
-## Debe verificarse el run_id del modelo que se quiere cargar
-## Se puede obtener el run_id desde la interfaz de MLflow
-
-logged_model = "m-63cd284a15cd4404a530c3dae9461ad9"
+# Carga el modelo usando el run_id y el artifact_path
+logged_model = "runs:/23130ed670f648a0990d32f5b0c77507/model"
 loaded_model = mlflow.pyfunc.load_model(logged_model)
-y = loaded_model.predict(x)
-
-print(y)
-
-#### END MAKE_PREDICTIONS ####
+predictions = loaded_model.predict(X)
+print(predictions)
